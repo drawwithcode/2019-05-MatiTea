@@ -34,6 +34,7 @@ function draw() {
   background(5);
 
   showVideo();
+  keyTyped();
   showInterface();
   audioVisualizer();
 
@@ -94,7 +95,8 @@ function showInterface() {
     let day = date.getDate().toString();
     if (day.length == 1) day = '0' + day;
 
-    let month = date.getMonth().toString();
+    let month = (date.getMonth() + 1).toString();
+    //console.log(month);
     if (month.length == 1) month = '0' + month;
 
     let year = date.getFullYear();
@@ -131,6 +133,11 @@ function showInterface() {
 
     this.textOverlay('● REC', 40, 60, 'red');
     this.textOverlay('CAM 1', 40, 95, 'white');
+
+    push();
+    textAlign(CENTER);
+    this.textOverlay('Press B or P key to add a filter \nPress any key to reset', width / 2, height - 85, 'white');
+    pop();
   }
 
   this.initialize();
@@ -162,24 +169,16 @@ const exportCamera = {
     let button = createButton('<svg style="width:24px;height:24px" viewBox="0 0 24 24"> <path fill="#ffffff" d="M23,12L19,8V11H10V13H19V16M1,18V6C1,4.89 1.9,4 3,4H15A2,2 0 0,1 17,6V9H15V6H3V18H15V15H17V18A2,2 0 0,1 15,20H3A2,2 0 0,1 1,18Z" /> </svg>');
 
     button.position(width - 80, 40);
-    button.style('width', '40px');
-    button.style('height', '40px');
-    button.style('line-height', '36px');
-    button.style('font-size', '30px');
-    button.style('background', 'none');
-    button.style('border', '2px solid gray');
-    button.style('border-radius', '3px');
-    button.style('color', 'white');
-    button.style('outline', 'none');
+    button.addClass("button");
 
     button.mousePressed(function () {
       _this.savePic();
       _this.showVoiceCommandHint = true;
 
-      // after 5 seconds, hide it
+      // after 7 seconds, hide it
       setTimeout(function () {
         _this.showVoiceCommandHint = false;
-      }, 5000)
+      }, 7000)
     });
   },
 
@@ -188,6 +187,8 @@ const exportCamera = {
       push();
       textSize(20);
       textAlign(RIGHT);
+      fill('white');
+      noStroke;
       text('Say "Export" to save image', width - 110, 65);
       pop();
     }
@@ -199,12 +200,22 @@ const exportCamera = {
       console.log(speech.resultString);
     }
 
-    if (speech.resultString.toLowerCase() == "Export") {
-      this.savePic();
+    if (speech.resultString.toLowerCase() == "export") {
+      saveCanvas('myPic.png');
     }
   },
 
   savePic: function () {
     saveCanvas('myPic.png');
   }
+}
+
+// using keys to change filter
+function keyTyped() {
+  if (key === 'b') {
+    filter('BLUR', 1);
+  } if (key === 'p') {
+    filter('POSTERIZE', 10);
+  }
+  return false;
 }
