@@ -49,7 +49,7 @@ function showVideo() {
   this.showCamera = function () {
     const myVideo = capture.loadPixels();
     image(myVideo, 0, 0, 1280, 960);
-    filter('GRAY');
+    // filter('GRAY');
   }
 
   // horizontal lines to create the image filter
