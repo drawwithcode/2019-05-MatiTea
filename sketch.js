@@ -213,9 +213,9 @@ const exportCamera = {
 // using keys to change filter
 function keyTyped() {
   if (key === 'b') {
-    filter('BLUR', 1);
+    filter(BLUR, 1);
   } if (key === 'p') {
-    filter('POSTERIZE', 10);
+    filter(POSTERIZE, 10);
   }
   return false;
 }
